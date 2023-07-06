@@ -21,15 +21,15 @@ aws_bastion_size = "t3.small"
 #Kubernetes Cluster
 aws_kube_master_num       = 3
 aws_kube_master_size      = "t3.medium"
-aws_kube_master_disk_size = 50
+aws_kube_master_disk_size = 20
 
 aws_etcd_num       = 0
 aws_etcd_size      = "t3.medium"
-aws_etcd_disk_size = 50
+aws_etcd_disk_size = 20
 
-aws_kube_worker_num       = 4
+aws_kube_worker_num       = 3
 aws_kube_worker_size      = "t3.medium"
-aws_kube_worker_disk_size = 50
+aws_kube_worker_disk_size = 20
 
 #Settings AWS ELB
 aws_nlb_api_port    = 6443

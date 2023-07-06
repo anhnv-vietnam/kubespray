@@ -24,8 +24,8 @@ data "aws_ami" "distro" {
   most_recent = true
 
   filter {
-    name   = "name"
-    values = ["debian-10-amd64-*"]
+    name   = "image_id"
+    values = ["ami-09cd747c78a9add63"]
   }
 
   filter {
@@ -33,7 +33,7 @@ data "aws_ami" "distro" {
     values = ["hvm"]
   }
 
-  owners = ["136693071363"] # Debian-10
+  owners = ["amazon"] # Amazon AMI
 }
 
 //AWS VPC Variables

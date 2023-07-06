@@ -65,6 +65,12 @@ resource "aws_instance" "bastion-server" {
     Cluster = var.aws_cluster_name
     Role    = "bastion-${var.aws_cluster_name}-${count.index}"
   }))
+  user_data = <<EOF
+#!/bin/bash
+apt-get install -y docker git vi vim;
+systemctl start docker;
+usermod -G wheel ubuntu;
+EOF
 }
 
 /*
