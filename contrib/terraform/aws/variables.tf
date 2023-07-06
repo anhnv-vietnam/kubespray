@@ -24,8 +24,8 @@ data "aws_ami" "distro" {
   most_recent = true
 
   filter {
-    name   = "image_id"
-    values = ["ami-09cd747c78a9add63"]
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
 
   filter {
@@ -33,8 +33,24 @@ data "aws_ami" "distro" {
     values = ["hvm"]
   }
 
-  owners = ["amazon"] # Amazon AMI
+  owners = ["099720109477"] # Canonical
 }
+
+#data "aws_ami" "distro" {
+#  most_recent = true
+#
+#  filter {
+#    name   = "image_id"
+#    values = ["ami-09cd747c78a9add63"]
+#  }
+#
+#  filter {
+#    name   = "virtualization-type"
+#    values = ["hvm"]
+#  }
+#
+#  owners = ["amazon"] # Amazon AMI
+#}
 
 //AWS VPC Variables
 
