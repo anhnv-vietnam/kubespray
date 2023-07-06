@@ -66,6 +66,7 @@ resource "aws_instance" "bastion-server" {
     Role    = "bastion-${var.aws_cluster_name}-${count.index}"
   }))
   user_data = <<EOF
+#cloud-boothook
 #!/bin/bash
 apt update
 apt install -y apt-transport-https ca-certificates curl software-properties-common
