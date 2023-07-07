@@ -16,6 +16,10 @@ resource "tls_private_key" "example_keypair" {
 resource "aws_key_pair" "example_keypair" {
   key_name   = var.AWS_SSH_KEY_NAME  # Replace with your desired key pair name
   public_key = tls_private_key.example_keypair.public_key_openssh
+  
+  provisioner "local-exec" { # Create a "mykey.pem" to your computer!!
+    command = "echo '${tls_private_key.example_keypair.private_key_pem}' > ~/.ssh/id_rsa && chmod 400 ~/.ssh/id_rsa"
+  }
 }
 
 data "aws_availability_zones" "available" {}
@@ -76,7 +80,6 @@ resource "aws_instance" "bastion-server" {
     Role    = "bastion-${var.aws_cluster_name}-${count.index}"
   }))
   user_data = <<EOF
-#cloud-boothook
 #!/bin/bash
 apt update
 apt install -y apt-transport-https ca-certificates curl software-properties-common
@@ -86,11 +89,12 @@ apt-cache policy docker-ce
 apt install -y docker-ce git
 systemctl start docker
 usermod -aG docker ubuntu
-su - ubuntu
-cd
-echo "${tls_private_key.example_keypair.private_key_pem}" > ~/.ssh/id_rsa
-git clone https://github.com/anhnv-vietnam/kubespray.git
-cd kubespray
+#su - ubuntu
+#cd
+mkdir -p /home/ubuntu/.ssh/
+echo "${tls_private_key.example_keypair.private_key_pem}" > /home/ubuntu/.ssh/id_rsa && chmod 400 /home/ubuntu/.ssh/id_rsa && chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
+#git clone https://github.com/anhnv-vietnam/kubespray.git
+#cd kubespray
 EOF
 }
 
