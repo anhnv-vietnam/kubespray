@@ -8,6 +8,16 @@ provider "aws" {
   region     = var.AWS_DEFAULT_REGION
 }
 
+resource "tls_private_key" "example_keypair" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "example_keypair" {
+  key_name   = var.AWS_SSH_KEY_NAME  # Replace with your desired key pair name
+  public_key = tls_private_key.example_keypair.public_key_openssh
+}
+
 data "aws_availability_zones" "available" {}
 
 /*
@@ -78,6 +88,7 @@ systemctl start docker
 usermod -aG docker ubuntu
 su - ubuntu
 cd
+echo "${tls_private_key.example_keypair.private_key_pem}" > ~/.ssh/id_rsa
 git clone https://github.com/anhnv-vietnam/kubespray.git
 cd kubespray
 EOF
