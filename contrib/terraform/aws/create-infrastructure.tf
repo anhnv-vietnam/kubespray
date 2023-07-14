@@ -17,9 +17,9 @@ resource "aws_key_pair" "example_keypair" {
   key_name   = var.AWS_SSH_KEY_NAME  # Replace with your desired key pair name
   public_key = tls_private_key.example_keypair.public_key_openssh
   
-  provisioner "local-exec" { # Create a "mykey.pem" to your computer!!
-    command = "echo '${tls_private_key.example_keypair.private_key_pem}' > ~/.ssh/id_rsa && chmod 400 ~/.ssh/id_rsa"
-  }
+#  provisioner "local-exec" { # Create a "mykey.pem" to your computer!!
+#    command = "echo '${tls_private_key.example_keypair.private_key_pem}' > ~/.ssh/id_rsa && chmod 400 ~/.ssh/id_rsa"
+#  }
 }
 
 data "aws_availability_zones" "available" {}
@@ -59,6 +59,16 @@ module "aws-iam" {
 }
 
 /*
+* Create S3 Bucket on AWS
+*
+*/
+resource "aws_s3_bucket" "demo-testlab-k8s" {
+  bucket = "demo-testlab-k8s"
+  acl    = "private"
+}
+
+
+/*
 * Create Bastion Instances in AWS
 *
 */
@@ -93,8 +103,9 @@ usermod -aG docker ubuntu
 #cd
 mkdir -p /home/ubuntu/.ssh/
 echo "${tls_private_key.example_keypair.private_key_pem}" > /home/ubuntu/.ssh/id_rsa && chmod 400 /home/ubuntu/.ssh/id_rsa && chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
-#git clone https://github.com/anhnv-vietnam/kubespray.git
-#cd kubespray
+cd /home/ubuntu/
+git clone https://github.com/anhnv-vietnam/kubespray.git
+chown -R ubuntu:ubuntu kubespray
 EOF
 }
 
